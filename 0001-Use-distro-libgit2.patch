@@ -1,0 +1,57 @@
+From 268bff042992e5bd0fb09784a1986f4fbf310f72 Mon Sep 17 00:00:00 2001
+From: "Brett T. Warden" <brett.t.warden@intel.com>
+Date: Wed, 29 Aug 2018 15:47:56 -0700
+Subject: [PATCH 1/4] Use distro libgit2
+
+---
+ phoenix.pro                  | 6 ++----
+ src/version/partschecker.cpp | 2 +-
+ 2 files changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/phoenix.pro b/phoenix.pro
+index 301ce0c..058b441 100644
+--- a/phoenix.pro
++++ b/phoenix.pro
+@@ -163,7 +163,7 @@ RESOURCES += phoenixresources.qrc
+ 
+ # Fritzing is using libgit2 since version 0.9.3
+ 
+-LIBGIT2INCLUDE = ../libgit2/include
++LIBGIT2INCLUDE = /usr/include
+ exists($$LIBGIT2INCLUDE/git2.h) {
+     message("found libgit2 include path at $$LIBGIT2INCLUDE")
+ }
+@@ -175,8 +175,6 @@ else {
+     error("libgit2 include path not found in $$LIBGIT2INCLUDE")
+ }
+ 
+-INCLUDEPATH += $$LIBGIT2INCLUDE
+-
+ win32 {
+     contains(QMAKE_TARGET.arch, x86_64) {
+             LIBGIT2LIB = ../libgit2/build64
+@@ -194,7 +192,7 @@ win32 {
+ }
+ 
+ unix {
+-    LIBGIT2LIB = ../libgit2/build
++    LIBGIT2LIB = /usr/lib64
+     macx {
+         exists($$LIBGIT2LIB/libgit2.dylib) {
+             message("found libgit2 library in $$LIBGIT2LIB")
+diff --git a/src/version/partschecker.cpp b/src/version/partschecker.cpp
+index a3e3967..68775b9 100644
+--- a/src/version/partschecker.cpp
++++ b/src/version/partschecker.cpp
+@@ -121,7 +121,7 @@ bool PartsChecker::newPartsAvailable(const QString &repoPath, const QString & sh
+     /**
+      * Connect to the remote.
+      */
+-    error = git_remote_connect(remote, GIT_DIRECTION_FETCH, &callbacks);
++    error = git_remote_connect(remote, GIT_DIRECTION_FETCH, &callbacks, NULL, NULL);
+     if (error) {
+         partsCheckerResult.partsCheckerError = PARTS_CHECKER_ERROR_REMOTE;
+         partsCheckerResult.errorMessage = QObject::tr("Unable to access network site for '%1'. %2").arg(repoPath).arg(sBoilerPlate1);
+-- 
+2.18.0
+

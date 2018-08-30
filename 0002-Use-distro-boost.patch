@@ -1,0 +1,26 @@
+From 1ccd2c845266670ed16cf9b800723c59fabb9d86 Mon Sep 17 00:00:00 2001
+From: "Brett T. Warden" <brett.t.warden@intel.com>
+Date: Wed, 29 Aug 2018 15:58:27 -0700
+Subject: [PATCH 2/4] Use distro boost
+
+---
+ pri/utils.pri | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/pri/utils.pri b/pri/utils.pri
+index ae14ea8..747d97d 100644
+--- a/pri/utils.pri
++++ b/pri/utils.pri
+@@ -30,6 +30,9 @@ contains(LATESTBOOST, 0) {
+     unix {
+         !macx {
+              BOOSTINFO = $$system(dpkg -s libboost-dev | grep 'Version')
++             isEmpty(BOOSTINFO) {
++                 BOOSTINFO = $$system(ls /usr/lib64/libboost_*.so.* | head -1)
++             }
+              BADVERSION = $$find(BOOSTINFO, 1\.54)
+              !isEmpty(BADVERSION) {
+                  message("Boost 1.54 has a bug in a function that Fritzing uses, so download or install some other version")
+-- 
+2.18.0
+

@@ -1,0 +1,25 @@
+From ba7fd81b3a4afed48dc1baf16f271d14f1bd6eb0 Mon Sep 17 00:00:00 2001
+From: "Brett T. Warden" <brett.t.warden@intel.com>
+Date: Thu, 30 Aug 2018 09:19:35 -0700
+Subject: [PATCH 3/4] Fix desktop file
+
+---
+ fritzing.desktop | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fritzing.desktop b/fritzing.desktop
+index 854319e..42db347 100644
+--- a/fritzing.desktop
++++ b/fritzing.desktop
+@@ -4,7 +4,7 @@ Name=Fritzing
+ GenericName=Fritzing
+ Comment=Electronic Design Automation software
+ Exec=Fritzing
+-Icon=icons/fritzing_icon.png
++Icon=fritzing.png
+ Terminal=false
+ Type=Application
+ Categories=Development;IDE;Electronics;EDA;
+-- 
+2.18.0
+

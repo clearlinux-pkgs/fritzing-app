@@ -1,0 +1,32 @@
+From f427daa4c19dd03a24923ba5d8a894a09abe7139 Mon Sep 17 00:00:00 2001
+From: "Brett T. Warden" <brett.t.warden@intel.com>
+Date: Thu, 30 Aug 2018 10:49:38 -0700
+Subject: [PATCH 4/4] Explain stateless in manpage
+
+---
+ Fritzing.1 | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/Fritzing.1 b/Fritzing.1
+index 7216de6..b2785ba 100644
+--- a/Fritzing.1
++++ b/Fritzing.1
+@@ -12,6 +12,15 @@ software and website in the spirit of Processing and Arduino, developing a tool
+ that allows users to document their prototypes, share them with others, teach
+ electronics in a classroom, and to create a pcb layout for professional
+ manufacturing.
++.PP
++This distribution includes a read-only copy of Fritzing's parts database in
++/usr/share/fritzing that is used by default. If a user-specific copy in
++~/.local/share/fritzing, or a system-wide copy in /var/lib/fritzing exists,
++it will be used instead. You can populate either path by cloning the
++fritzing-parts repository in it, e.g.:
++git clone https://github.com/fritzing/fritzing-parts.git <PATH>/fritzing-parts
++If this path is writeable by the current user, Fritzing will be able to
++synchronize this copy with the upstream repository.
+ .SH AUTHOR
+ This manual page was written by Enrique Hernández Bello <ehbello@gmail.com>,
+ for the Debian project (and may be used by others).
+-- 
+2.18.0
+
