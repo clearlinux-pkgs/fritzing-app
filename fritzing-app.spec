@@ -4,17 +4,17 @@
 #
 Name     : fritzing-app
 Version  : 0.9.3b
-Release  : 3
+Release  : 4
 URL      : https://github.com/fritzing/fritzing-app/archive/0.9.3b.tar.gz
 Source0  : https://github.com/fritzing/fritzing-app/archive/0.9.3b.tar.gz
 Source1  : https://github.com/fritzing/fritzing-parts/archive/0.9.3b.zip
 Summary  : No detailed summary available
 Group    : Development/Tools
 License  : Apache-2.0 CC-BY-SA-3.0 GPL-2.0 GPL-3.0
-Requires: fritzing-app-bin
-Requires: fritzing-app-data
-Requires: fritzing-app-license
-Requires: fritzing-app-man
+Requires: fritzing-app-bin = %{version}-%{release}
+Requires: fritzing-app-data = %{version}-%{release}
+Requires: fritzing-app-license = %{version}-%{release}
+Requires: fritzing-app-man = %{version}-%{release}
 BuildRequires : boost-dev
 BuildRequires : buildreq-qmake
 BuildRequires : libgit2-dev
@@ -29,13 +29,14 @@ BuildRequires : pkgconfig(Qt5Sql)
 BuildRequires : pkgconfig(Qt5Svg)
 BuildRequires : pkgconfig(Qt5Widgets)
 BuildRequires : pkgconfig(Qt5Xml)
-Patch1: 019d1c25e1923eb83ecb7d9c81f05f34631620e5.patch
-Patch2: 145b482c0ed72f729cdfb96a8ae118aeaf633fa1.patch
-Patch3: 6c0f254b4b2ef4dda7662884b2a30bd5b87b498a.patch
-Patch4: 0001-Use-distro-libgit2.patch
-Patch5: 0002-Use-distro-boost.patch
-Patch6: 0003-Fix-desktop-file.patch
-Patch7: 0004-Explain-stateless-in-manpage.patch
+Patch1: 0001-allow-user-and-administrator-to-install-parts-librar.patch
+Patch2: 0002-don-t-scan-filesystem-for-application-directory-if-i.patch
+Patch3: 0003-provide-script-for-user-to-clone-parts-library.patch
+Patch4: 0004-Use-distro-libgit2.patch
+Patch5: 0005-Use-distro-boost.patch
+Patch6: 0006-Fix-desktop-file.patch
+Patch7: 0007-Explain-stateless-in-manpage.patch
+Patch8: 0008-Fix-detection-of-system-installed-boost.patch
 
 %description
 This is a hackish script that will convert gEDA-pcb footprint definitions
@@ -44,9 +45,8 @@ to Frizing footprint XML.
 %package bin
 Summary: bin components for the fritzing-app package.
 Group: Binaries
-Requires: fritzing-app-data
-Requires: fritzing-app-license
-Requires: fritzing-app-man
+Requires: fritzing-app-data = %{version}-%{release}
+Requires: fritzing-app-license = %{version}-%{release}
 
 %description bin
 bin components for the fritzing-app package.
@@ -58,15 +58,6 @@ Group: Data
 
 %description data
 data components for the fritzing-app package.
-
-
-%package doc
-Summary: doc components for the fritzing-app package.
-Group: Documentation
-Requires: fritzing-app-man
-
-%description doc
-doc components for the fritzing-app package.
 
 
 %package license
@@ -87,10 +78,11 @@ man components for the fritzing-app package.
 
 %prep
 %setup -q -n fritzing-app-0.9.3b
-cd ..
-%setup -q -T -D -n fritzing-app-0.9.3b -b 1
+cd %{_builddir}
+unzip -q %{_sourcedir}/0.9.3b.zip
+cd %{_builddir}/fritzing-app-0.9.3b
 mkdir -p parts
-mv %{_topdir}/BUILD/fritzing-parts-0.9.3b/* %{_topdir}/BUILD/fritzing-app-0.9.3b/parts
+cp -r %{_builddir}/fritzing-parts-0.9.3b/* %{_builddir}/fritzing-app-0.9.3b/parts
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
@@ -98,30 +90,32 @@ mv %{_topdir}/BUILD/fritzing-parts-0.9.3b/* %{_topdir}/BUILD/fritzing-app-0.9.3b
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
+%patch8 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
-%qmake QMAKE_STRIP=""
+export LANG=C.UTF-8
+export GCC_IGNORE_WERROR=1
+%qmake QMAKE_CFLAGS+=-fno-lto QMAKE_CXXFLAGS+=-fno-lto  QMAKE_STRIP=""
 test -r config.log && cat config.log
 make  %{?_smp_mflags}
 
 %install
-export SOURCE_DATE_EPOCH=1535733413
+export SOURCE_DATE_EPOCH=1584051767
 rm -rf %{buildroot}
-mkdir -p %{buildroot}/usr/share/doc/fritzing-app
-cp LICENSE.CC-BY-SA %{buildroot}/usr/share/doc/fritzing-app/LICENSE.CC-BY-SA
-cp LICENSE.GPL2 %{buildroot}/usr/share/doc/fritzing-app/LICENSE.GPL2
-cp LICENSE.GPL3 %{buildroot}/usr/share/doc/fritzing-app/LICENSE.GPL3
-cp parts/LICENSE.txt %{buildroot}/usr/share/doc/fritzing-app/parts_LICENSE.txt
-cp parts/svg/core/LICENSE.txt %{buildroot}/usr/share/doc/fritzing-app/parts_svg_core_LICENSE.txt
-cp parts/svg/core/breadboard/LICENSE.txt %{buildroot}/usr/share/doc/fritzing-app/parts_svg_core_breadboard_LICENSE.txt
-cp parts/svg/core/icon/LICENSE.txt %{buildroot}/usr/share/doc/fritzing-app/parts_svg_core_icon_LICENSE.txt
-cp parts/svg/core/pcb/LICENSE.txt %{buildroot}/usr/share/doc/fritzing-app/parts_svg_core_pcb_LICENSE.txt
-cp parts/svg/core/schematic/LICENSE.txt %{buildroot}/usr/share/doc/fritzing-app/parts_svg_core_schematic_LICENSE.txt
-cp resources/fonts/NOTICE %{buildroot}/usr/share/doc/fritzing-app/resources_fonts_NOTICE
+mkdir -p %{buildroot}/usr/share/package-licenses/fritzing-app
+cp %{_builddir}/fritzing-app-0.9.3b/LICENSE.CC-BY-SA %{buildroot}/usr/share/package-licenses/fritzing-app/12392b6df4efd1183e7e815319a59770b9afbc9f
+cp %{_builddir}/fritzing-app-0.9.3b/LICENSE.GPL2 %{buildroot}/usr/share/package-licenses/fritzing-app/340d434117e5e2cb9c61f0d875284dedfb4df81b
+cp %{_builddir}/fritzing-app-0.9.3b/LICENSE.GPL3 %{buildroot}/usr/share/package-licenses/fritzing-app/82317c474ea35ba05d34addc115f2a94e1bd2145
+cp %{_builddir}/fritzing-app-0.9.3b/resources/fonts/NOTICE %{buildroot}/usr/share/package-licenses/fritzing-app/99f19b0797783be8eaa32d67553b20ab343a2085
+cp %{_builddir}/fritzing-parts-0.9.3b/LICENSE.txt %{buildroot}/usr/share/package-licenses/fritzing-app/2066855c0b8767bc84028813e7085a00ff420461
+cp %{_builddir}/fritzing-parts-0.9.3b/svg/core/LICENSE.txt %{buildroot}/usr/share/package-licenses/fritzing-app/2066855c0b8767bc84028813e7085a00ff420461
+cp %{_builddir}/fritzing-parts-0.9.3b/svg/core/breadboard/LICENSE.txt %{buildroot}/usr/share/package-licenses/fritzing-app/2066855c0b8767bc84028813e7085a00ff420461
+cp %{_builddir}/fritzing-parts-0.9.3b/svg/core/icon/LICENSE.txt %{buildroot}/usr/share/package-licenses/fritzing-app/2066855c0b8767bc84028813e7085a00ff420461
+cp %{_builddir}/fritzing-parts-0.9.3b/svg/core/pcb/LICENSE.txt %{buildroot}/usr/share/package-licenses/fritzing-app/2066855c0b8767bc84028813e7085a00ff420461
+cp %{_builddir}/fritzing-parts-0.9.3b/svg/core/schematic/LICENSE.txt %{buildroot}/usr/share/package-licenses/fritzing-app/2066855c0b8767bc84028813e7085a00ff420461
 %make_install
 
 %files
@@ -9151,22 +9145,14 @@ cp resources/fonts/NOTICE %{buildroot}/usr/share/doc/fritzing-app/resources_font
 /usr/share/fritzing/translations/syntax/styles.xml
 /usr/share/icons/fritzing.png
 
-%files doc
-%defattr(0644,root,root,0755)
-%doc /usr/share/doc/fritzing\-app/*
-
 %files license
-%defattr(-,root,root,-)
-/usr/share/doc/fritzing-app/LICENSE.CC-BY-SA
-/usr/share/doc/fritzing-app/LICENSE.GPL2
-/usr/share/doc/fritzing-app/LICENSE.GPL3
-/usr/share/doc/fritzing-app/parts_LICENSE.txt
-/usr/share/doc/fritzing-app/parts_svg_core_LICENSE.txt
-/usr/share/doc/fritzing-app/parts_svg_core_breadboard_LICENSE.txt
-/usr/share/doc/fritzing-app/parts_svg_core_icon_LICENSE.txt
-/usr/share/doc/fritzing-app/parts_svg_core_pcb_LICENSE.txt
-/usr/share/doc/fritzing-app/parts_svg_core_schematic_LICENSE.txt
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/fritzing-app/12392b6df4efd1183e7e815319a59770b9afbc9f
+/usr/share/package-licenses/fritzing-app/2066855c0b8767bc84028813e7085a00ff420461
+/usr/share/package-licenses/fritzing-app/340d434117e5e2cb9c61f0d875284dedfb4df81b
+/usr/share/package-licenses/fritzing-app/82317c474ea35ba05d34addc115f2a94e1bd2145
+/usr/share/package-licenses/fritzing-app/99f19b0797783be8eaa32d67553b20ab343a2085
 
 %files man
-%defattr(-,root,root,-)
+%defattr(0644,root,root,0755)
 /usr/share/man/man1/Fritzing.1

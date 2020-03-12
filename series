@@ -5,3 +5,4 @@
 0005-Use-distro-boost.patch
 0006-Fix-desktop-file.patch
 0007-Explain-stateless-in-manpage.patch
+0008-Fix-detection-of-system-installed-boost.patch

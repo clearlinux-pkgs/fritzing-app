@@ -1,0 +1,112 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Patrick McCarty <patrick.mccarty@intel.com>
+Date: Thu, 12 Mar 2020 15:07:43 -0700
+Subject: [PATCH] Fix detection of system-installed boost
+
+Adapted from upstream changes:
+
+https://github.com/fritzing/fritzing-app/pull/3249
+https://github.com/fritzing/fritzing-app/pull/3251
+
+Signed-off-by: Patrick McCarty <patrick.mccarty@intel.com>
+---
+ config.tests/boost/boost.pro |  1 +
+ config.tests/boost/main.cpp  |  8 ++++++++
+ phoenix.pro                  |  2 ++
+ pri/utils.pri                | 40 ++++++++++--------------------------
+ 4 files changed, 22 insertions(+), 29 deletions(-)
+ create mode 100644 config.tests/boost/boost.pro
+ create mode 100644 config.tests/boost/main.cpp
+
+diff --git a/config.tests/boost/boost.pro b/config.tests/boost/boost.pro
+new file mode 100644
+index 0000000..bba41b9
+--- /dev/null
++++ b/config.tests/boost/boost.pro
+@@ -0,0 +1 @@
++SOURCES = main.cpp
+diff --git a/config.tests/boost/main.cpp b/config.tests/boost/main.cpp
+new file mode 100644
+index 0000000..a245b7c
+--- /dev/null
++++ b/config.tests/boost/main.cpp
+@@ -0,0 +1,8 @@
++#include <boost/version.hpp>
++#if BOOST_VERSION / 100000 == 1 && BOOST_VERSION / 100 % 1000 == 54
++#error "Boost 1.54 found"
++#endif
++
++int main()
++{
++}
+diff --git a/phoenix.pro b/phoenix.pro
+index 058b441..4b3ab9d 100644
+--- a/phoenix.pro
++++ b/phoenix.pro
+@@ -33,6 +33,8 @@
+ 
+ CONFIG += debug_and_release
+ 
++load(configure)
++
+ win32 {
+ # release build using msvc 2010 needs to use Multi-threaded (/MT) for the code generation/runtime library option
+ # release build using msvc 2010 needs to add msvcrt.lib;%(IgnoreSpecificDefaultLibraries) to the linker/no default libraries option
+diff --git a/pri/utils.pri b/pri/utils.pri
+index 747d97d..da04ebd 100644
+--- a/pri/utils.pri
++++ b/pri/utils.pri
+@@ -21,42 +21,24 @@
+ BOOSTS = 43 44 45 46 47 48 49 50 51 52 53 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99
+ LATESTBOOST = 0
+ for(boost, BOOSTS) {
+-        exists(../src/lib/boost_1_$${boost}_0) {
+-                LATESTBOOST = $$boost
+-        }
+-}
+-
+-contains(LATESTBOOST, 0) {
+-    unix {
+-        !macx {
+-             BOOSTINFO = $$system(dpkg -s libboost-dev | grep 'Version')
+-             isEmpty(BOOSTINFO) {
+-                 BOOSTINFO = $$system(ls /usr/lib64/libboost_*.so.* | head -1)
+-             }
+-             BADVERSION = $$find(BOOSTINFO, 1\.54)
+-             !isEmpty(BADVERSION) {
+-                 message("Boost 1.54 has a bug in a function that Fritzing uses, so download or install some other version")
+-                 error("Easiest to copy the boost library to .../src/lib/, so that you have .../src/lib/boost_1_xx_0")
+-             }
+-             isEmpty(BADVERSION) {
+-                 BOOSTVERSION = $$find(BOOSTINFO, 1\...\.0)
+-                 !isEmpty(BOOSTVERSION) {
+-                     LATESTBOOST = installed
+-                     message("using installed BOOST library")
+-                 }
+-             }
+-        }
++    exists(../src/lib/boost_1_$${boost}_0) {
++        LATESTBOOST = $$boost
+     }
+ }
+ 
+ contains(LATESTBOOST, 0) {
+-        message("Please download the boost library--you can find it at http://www.boost.org/")
+-        message("Note that boost 1.54 has a bug in a function that Fritzing uses, so download some other version")
+-        error("Copy the boost library to .../src/lib/, so that you have .../src/lib/boost_1_xx_0")
++    qtCompileTest(boost)
++    config_boost {
++        LATESTBOOST = installed
++        message("using installed Boost library")
++    } else {
++        message("Boost 1.54 has a bug in a function that Fritzing uses, so download or install some other version")
++        error("Easiest to copy the Boost library to .../src/lib/, so that you have .../src/lib/boost_1_xx_0")
++    }
+ }
+ 
+ !contains(LATESTBOOST, installed) {
+-    message("using boost from src/lib/boost_1_$${LATESTBOOST}_0")
++    message("using Boost from src/lib/boost_1_$${LATESTBOOST}_0")
+     INCLUDEPATH += src/lib/boost_1_$${LATESTBOOST}_0
+ }
+ 
