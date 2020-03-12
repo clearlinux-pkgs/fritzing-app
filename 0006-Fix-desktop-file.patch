@@ -1,7 +1,7 @@
-From ba7fd81b3a4afed48dc1baf16f271d14f1bd6eb0 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "Brett T. Warden" <brett.t.warden@intel.com>
 Date: Thu, 30 Aug 2018 09:19:35 -0700
-Subject: [PATCH 3/4] Fix desktop file
+Subject: [PATCH] Fix desktop file
 
 ---
  fritzing.desktop | 2 +-
@@ -20,6 +20,3 @@ index 854319e..42db347 100644
  Terminal=false
  Type=Application
  Categories=Development;IDE;Electronics;EDA;
--- 
-2.18.0
-

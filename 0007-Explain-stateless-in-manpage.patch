@@ -1,7 +1,7 @@
-From f427daa4c19dd03a24923ba5d8a894a09abe7139 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "Brett T. Warden" <brett.t.warden@intel.com>
 Date: Thu, 30 Aug 2018 10:49:38 -0700
-Subject: [PATCH 4/4] Explain stateless in manpage
+Subject: [PATCH] Explain stateless in manpage
 
 ---
  Fritzing.1 | 9 +++++++++
@@ -27,6 +27,3 @@ index 7216de6..b2785ba 100644
  .SH AUTHOR
  This manual page was written by Enrique Hernández Bello <ehbello@gmail.com>,
  for the Debian project (and may be used by others).
--- 
-2.18.0
-

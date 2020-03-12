@@ -1,4 +1,4 @@
-From 6c0f254b4b2ef4dda7662884b2a30bd5b87b498a Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Chris Mayo <aklhfex@gmail.com>
 Date: Sun, 3 Jul 2016 17:52:24 +0100
 Subject: [PATCH] provide script for user to clone parts library
@@ -10,7 +10,7 @@ Subject: [PATCH] provide script for user to clone parts library
 
 diff --git a/tools/user_parts_clone.sh b/tools/user_parts_clone.sh
 new file mode 100755
-index 00000000..ce171b86
+index 0000000..ce171b8
 --- /dev/null
 +++ b/tools/user_parts_clone.sh
 @@ -0,0 +1,8 @@

@@ -1,4 +1,4 @@
-From 145b482c0ed72f729cdfb96a8ae118aeaf633fa1 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Chris Mayo <aklhfex@gmail.com>
 Date: Sun, 3 Jul 2016 17:52:24 +0100
 Subject: [PATCH] don't scan filesystem for application directory if installed
@@ -18,7 +18,7 @@ installed.
  3 files changed, 16 insertions(+), 8 deletions(-)
 
 diff --git a/src/utils/folderutils.cpp b/src/utils/folderutils.cpp
-index 96f10c7b..9f3ac416 100644
+index 180f0f8..43162c3 100644
 --- a/src/utils/folderutils.cpp
 +++ b/src/utils/folderutils.cpp
 @@ -80,6 +80,7 @@ QDir  FolderUtils::getApplicationSubFolder(QString search) {
@@ -38,7 +38,7 @@ index 96f10c7b..9f3ac416 100644
     	return dir;
  }
  
-@@ -218,8 +219,15 @@ const QString FolderUtils::applicationDirPath() {
+@@ -237,8 +238,15 @@ const QString FolderUtils::applicationDirPath() {
  #ifdef Q_OS_WIN
          m_appPath = QCoreApplication::applicationDirPath();
  #else
@@ -55,7 +55,7 @@ index 96f10c7b..9f3ac416 100644
  		candidates.append(QCoreApplication::applicationDirPath());
  		QDir dir(QCoreApplication::applicationDirPath());
  		if (dir.cdUp()) {
-@@ -231,14 +239,8 @@ const QString FolderUtils::applicationDirPath() {
+@@ -250,14 +258,8 @@ const QString FolderUtils::applicationDirPath() {
  				}
  			}
  		}
@@ -71,7 +71,7 @@ index 96f10c7b..9f3ac416 100644
              //DebugDialog::debug(QString("candidate:%1").arg(candidate));
  			QDir dir(candidate);
 diff --git a/tools/deploy_fritzing_mac.sh b/tools/deploy_fritzing_mac.sh
-index ff6aa548..1e370728 100755
+index 3f73fe9..4fb5f91 100755
 --- a/tools/deploy_fritzing_mac.sh
 +++ b/tools/deploy_fritzing_mac.sh
 @@ -19,6 +19,9 @@ builddir=$workingdir/../release64  # this is pre-defined by Qt
@@ -85,7 +85,7 @@ index ff6aa548..1e370728 100755
  $QTBIN/qmake -o Makefile phoenix.pro
  make release  # release is the type of build
 diff --git a/tools/linux_release_script/release.sh b/tools/linux_release_script/release.sh
-index d0821016..da4e1aa6 100755
+index 60b96dc..cc93b0d 100755
 --- a/tools/linux_release_script/release.sh
 +++ b/tools/linux_release_script/release.sh
 @@ -28,6 +28,9 @@ else

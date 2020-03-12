@@ -1,4 +1,4 @@
-From 019d1c25e1923eb83ecb7d9c81f05f34631620e5 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Chris Mayo <aklhfex@gmail.com>
 Date: Sun, 3 Jul 2016 17:52:24 +0100
 Subject: [PATCH] allow user and administrator to install parts library
@@ -19,14 +19,14 @@ Default to <m_appPath>/parts
 Use the definition of PKGDATADIR as an indicator that Fritzing will be
 installed.
 ---
- src/utils/folderutils.cpp | 20 +++++++++++++++++++-
- 1 file changed, 19 insertions(+), 1 deletion(-)
+ src/utils/folderutils.cpp | 21 ++++++++++++++++++++-
+ 1 file changed, 20 insertions(+), 1 deletion(-)
 
 diff --git a/src/utils/folderutils.cpp b/src/utils/folderutils.cpp
-index 9f3ac416..000037a5 100644
+index 96f10c7..180f0f8 100644
 --- a/src/utils/folderutils.cpp
 +++ b/src/utils/folderutils.cpp
-@@ -121,6 +121,24 @@ QDir FolderUtils::getAppPartsSubFolder(QString search) {
+@@ -120,6 +120,24 @@ QDir FolderUtils::getAppPartsSubFolder(QString search) {
  
  QDir FolderUtils::getAppPartsSubFolder2(QString search) {
      if (m_partsPath.isEmpty()) {
@@ -51,7 +51,7 @@ index 9f3ac416..000037a5 100644
          QDir dir = getApplicationSubFolder("fritzing-parts");
          if (dir.exists()) {
              m_partsPath = dir.absolutePath();
-@@ -131,9 +148,10 @@ QDir FolderUtils::getAppPartsSubFolder2(QString search) {
+@@ -130,9 +148,10 @@ QDir FolderUtils::getAppPartsSubFolder2(QString search) {
                  m_partsPath = dir.absolutePath();
              }
          }

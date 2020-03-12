@@ -1,7 +1,7 @@
-From 1ccd2c845266670ed16cf9b800723c59fabb9d86 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "Brett T. Warden" <brett.t.warden@intel.com>
 Date: Wed, 29 Aug 2018 15:58:27 -0700
-Subject: [PATCH 2/4] Use distro boost
+Subject: [PATCH] Use distro boost
 
 ---
  pri/utils.pri | 3 +++
@@ -21,6 +21,3 @@ index ae14ea8..747d97d 100644
               BADVERSION = $$find(BOOSTINFO, 1\.54)
               !isEmpty(BADVERSION) {
                   message("Boost 1.54 has a bug in a function that Fritzing uses, so download or install some other version")
--- 
-2.18.0
-
