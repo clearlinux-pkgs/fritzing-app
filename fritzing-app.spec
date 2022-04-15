@@ -4,7 +4,7 @@
 #
 Name     : fritzing-app
 Version  : 0.9.3b
-Release  : 5
+Release  : 6
 URL      : https://github.com/fritzing/fritzing-app/archive/0.9.3b.tar.gz
 Source0  : https://github.com/fritzing/fritzing-app/archive/0.9.3b.tar.gz
 Source1  : https://github.com/fritzing/fritzing-parts/archive/0.9.3b.zip
@@ -103,7 +103,7 @@ test -r config.log && cat config.log
 make  %{?_smp_mflags}
 
 %install
-export SOURCE_DATE_EPOCH=1592618930
+export SOURCE_DATE_EPOCH=1649981613
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/fritzing-app
 cp %{_builddir}/fritzing-app-0.9.3b/LICENSE.CC-BY-SA %{buildroot}/usr/share/package-licenses/fritzing-app/12392b6df4efd1183e7e815319a59770b9afbc9f
