@@ -4,7 +4,7 @@
 #
 Name     : fritzing-app
 Version  : 0.9.3b
-Release  : 8
+Release  : 9
 URL      : https://github.com/fritzing/fritzing-app/archive/0.9.3b.tar.gz
 Source0  : https://github.com/fritzing/fritzing-app/archive/0.9.3b.tar.gz
 Source1  : https://github.com/fritzing/fritzing-parts/archive/0.9.3b.zip
